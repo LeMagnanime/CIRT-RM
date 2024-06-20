@@ -1,0 +1,21 @@
+-- Définition du module principal
+MODULE main
+VAR
+    light : {red, green, yellow}; -- Les états possibles du feu de circulation
+
+ASSIGN
+    init(light) := red; -- L'état initial du feu de circulation est rouge
+    next(light) :=
+        case
+            light = red    : green;   -- Après le rouge, le feu devient vert
+            light = green  : yellow;  -- Après le vert, le feu devient jaune
+            light = yellow : red;     -- Après le jaune, le feu devient rouge
+            TRUE           : red;     -- Par défaut, le feu revient à rouge
+        esac;
+
+-- Propriétés à vérifier
+-- La propriété de sécurité suivante vérifie que le feu n'est jamais rouge et vert en même temps
+SPEC AG !(light = red & light = green)
+
+-- La propriété de vivacité suivante vérifie que le feu sera toujours vert à un moment donné dans le futur
+SPEC AF light = green

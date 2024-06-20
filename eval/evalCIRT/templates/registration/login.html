@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style> 
+  .login-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: float 4s ease-in-out infinite;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container .form-group {
+            margin-bottom: 15px; /* Espace entre les éléments du formulaire */
+        }
+        .login-container button {
+            padding: 8px 16px; /* Ajuste la taille du bouton */
+            font-size: 14px; /* Ajuste la taille du texte du bouton */
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+</style>
+<div align="center" class="login-container">
+<h2 class="text-center">Log In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <br></br>
+  <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+
+{% endblock %}
+</div>

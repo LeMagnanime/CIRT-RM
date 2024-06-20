@@ -1,0 +1,5 @@
+<div class="planification-menu d-flex justify-content-start mb-2">
+    <a href= "{% url 'home' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" id="btn_planing"><i class="fas fa-calendar"></i> Cartographie des actifs</a>
+    <a href= "{% url 'vulnerabilite' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'vulnerabilite' %}active{% endif %}" id="btn_notification"><i class="fas fa-envelope-open-text"></i> Analyse des risques</a>
+    <a class="btn btn-light btn-sm ml-1" href=" " id="btn_depense"><i class="fas fa-tachometer-alt"></i> Dashboard des vulnérablités</a> 
+  </div>

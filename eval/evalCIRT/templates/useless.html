@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau des Actifs IT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <head><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script></head>
+
+    <style>
+        /* Styles CSS */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .add-button, .remove-button {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .checkbox-label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Liste des Actifs IT</h2>
+
+<table id="actiftable2">
+    <thead>
+    <tr>
+        <th colspan="8">ACTIFS EN SUPPORT</th>
+    </tr>
+    <tr>
+        <th>Actif</th>
+        <th>Description</th>
+        <th>Valeur unitaire de l'actif</th>
+        <th>Coût de l'installation</th>
+        <th>Coût de l'entretien</th>
+        <th>VA</th>
+        <th>Valeur d'indisponibilité/jour</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="actif-row">
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><input type="number" step="0.01"></td>
+        <td><button class="remove-button" onclick="supprimerActif(this)">-</button></td>
+    </tr>
+    </tbody>
+</table>
+
+<button class="add-button" onclick="openModal()">+</button>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <h3>Sélectionnez les actifs à ajouter :</h3>
+        <h4>ACTIFS EN SUPPORTS :</h4>
+        <label class="checkbox-label"><input type="checkbox" value="Ordinateurs laptop">Ordinateurs laptop</label>
+        <label class="checkbox-label"><input type="checkbox" value="Ordinateurs desktop">Ordinateurs desktop</label>
+        <label class="checkbox-label"><input type="checkbox" value="Appareils mobiles téléphones">Appareils mobiles téléphones</label>
+        <label class="checkbox-label"><input type="checkbox" value="Tablettes">Tablettes</label>
+        <label class="checkbox-label"><input type="checkbox" value="Serveurs">Serveurs</label>
+        <label class="checkbox-label"><input type="checkbox" value="Imprimantes">Imprimantes</label>
+        <label class="checkbox-label"><input type="checkbox" value="Scanners">Scanners</label>
+        <label class="checkbox-label"><input type="checkbox" value="Routeurs">Routeurs</label>
+        <label class="checkbox-label"><input type="checkbox" value="Commutateurs (Switches)">Commutateurs (Switches)</label>
+        <label class="checkbox-label"><input type="checkbox" value="Pare-feu (Firewalls)">Pare-feu (Firewalls)</label>
+        <label class="checkbox-label"><input type="checkbox" value="Disques durs externes">Disques durs externes</label>
+        <label class="checkbox-label"><input type="checkbox" value="Clés USB">Clés USB</label>
+        <label class="checkbox-label"><input type="checkbox" value="Écrans (moniteurs)">Écrans (moniteurs)</label>
+        <label class="checkbox-label"><input type="checkbox" value="Claviers">Claviers</label>
+        <label class="checkbox-label"><input type="checkbox" value="Souris">Souris</label>
+        <label class="checkbox-label"><input type="checkbox" value="Casques et écouteurs">Casques et écouteurs</label>
+        <label class="checkbox-label"><input type="checkbox" value="Webcams">Webcams</label>
+        <label class="checkbox-label"><input type="checkbox" value="Microphones">Microphones</label>
+        <h4>ACTIFS PRIMORDIAUX :</h4>
+        <label class="checkbox-label"><input type="checkbox" value="Données sensibles">Données sensibles</label>
+        <label class="checkbox-label"><input type="checkbox" value="Serveurs de production">Serveurs de production</label>
+        <label class="checkbox-label"><input type="checkbox" value="Applications critiques">Applications critiques</label>
+        <label class="checkbox-label"><input type="checkbox" value="Réseau principal">Réseau principal</label>
+        <label class="checkbox-label"><input type="checkbox" value="Accès physiques">Accès physiques</label>
+        <label class="checkbox-label"><input type="checkbox" value="Services essentiels">Services essentiels</label>
+        <label class="checkbox-label"><input type="checkbox" value="Stock de sécurité">Stock de sécurité</label>
+
+        <button onclick="ajouterActifs()">Ajouter</button>
+    </div>
+</div>
+
+
+<h5>Mon actif ne figure pas dans la liste proposée:</h5>
+<button class="add-button" onclick="ajouterActif('actiftable2')">Ajouter une ligne vide</button>
+<div align="right">
+<button onclick="enregistrerEtContinuer()">OK</button>
+<button onclick="retourALogin()">Retour</button>
+<button id="downloadBtn" type="button">Télécharger</button>
+
+</div>
+
+<script>
+    var modal = document.getElementById("myModal");
+
+    function openModal() {
+        modal.style.display = "block";
+    }
+    function ajouterActifs() {
+        var table = document.getElementById("actiftable2").getElementsByTagName('tbody')[0];
+        var checkboxes = document.querySelectorAll('#myModal input[type="checkbox"]:checked');
+
+        checkboxes.forEach(function (checkbox) {
+            var newRow = table.insertRow(-1);
+        newRow.innerHTML = '<td>' + checkbox.value + '</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><button class="remove-button" onclick="supprimerActif(this)">-</button></td>';
+    });
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function ajouterActif(tableId) {
+        var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow(-1);
+        newRow.className = "actif-row";
+        newRow.innerHTML = '<td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><button class="remove-button" onclick="supprimerActif(this)">-</button></td>';
+    }
+    function supprimerActif(button) {
+        var row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+
+    function enregistrerEtContinuer(row) {
+       /** Code pour enregistrer les données dans la base de données
+        var inputs = row.getElementsByTagName("input");
+        var actif = inputs[0].value; // Nom de l'actif
+        var description = inputs[1].value; // Description de l'actif
+        var valeurUnitaire = inputs[2].value; // Valeur unitaire
+        var coutInstallation = inputs[3].value; // Coût d'installation
+        var coutEntretien = inputs[4].value; // Coût d'entretien
+        var va = inputs[5].value; // VA
+        var valeurIndisponibilite = inputs[6].value; // Valeur d'indisponibilité/jour
+
+        // Envoi des données à la base de données (requête AJAX ou autre)
+        // Exemple simplifié pour une requête AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "url_de_votre_api_pour_enregistrer_les_donnees", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Réponse de la base de données
+                console.log(xhr.responseText);
+            }
+        };
+        xhr.send(JSON.stringify({actif: actif, description: description, valeurUnitaire: valeurUnitaire, coutInstallation: coutInstallation, coutEntretien: coutEntretien, va: va, valeurIndisponibilite: valeurIndisponibilite}));
+    }**/
+        // Rediriger vers la page du tableau des vulnérabilités
+        window.location.href = "tableau_vulnerabilite.html";
+    }
+
+    function retourALogin() {
+        // Code pour retourner à la page de login
+        window.location.href = "login.html";
+    }
+    // Fonction pour enregistrer les données dans la base de données (exemple simplifié)
+    function enregistrerDonnees(row) {
+        var inputs = row.getElementsByTagName("input");
+        var actif = inputs[0].value; // Nom de l'actif
+        var description = inputs[1].value; // Description de l'actif
+        var valeurUnitaire = inputs[2].value; // Valeur unitaire
+        var coutInstallation = inputs[3].value; // Coût d'installation
+        var coutEntretien = inputs[4].value; // Coût d'entretien
+        var va = inputs[5].value; // VA
+        var valeurIndisponibilite = inputs[6].value; // Valeur d'indisponibilité/jour
+
+        // Envoi des données à la base de données (requête AJAX ou autre)
+        // Exemple simplifié pour une requête AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "url_de_votre_api_pour_enregistrer_les_donnees", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Réponse de la base de données
+                console.log(xhr.responseText);
+            }
+        };
+        xhr.send(JSON.stringify({actif: actif, description: description, valeurUnitaire: valeurUnitaire, coutInstallation: coutInstallation, coutEntretien: coutEntretien, va: va, valeurIndisponibilite: valeurIndisponibilite}));
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('downloadBtn').addEventListener('click', function () {
+                html2canvas(document.body, {
+                    useCORS: true,
+                    allowTaint: true,
+                    height: document.body.scrollHeight, // Capture la hauteur totale de la page
+                    windowWidth: document.body.clientWidth // Utilise la largeur visible de la page
+                }).then(function (canvas) {
+                    var imgData = canvas.toDataURL('image/png');
+                    var pdf = new jsPDF('p', 'mm', 'a4');
+                    var width = pdf.internal.pageSize.getWidth();
+
+                    // Calcule la hauteur de la page PDF en fonction du rapport d'aspect de l'image capturée
+                    var height = (canvas.height * width) / canvas.width;
+
+                    // Ajoute l'image au PDF, en commençant par le coin supérieur gauche (0, 0)
+                    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+
+                    // Enregistre le PDF
+                    pdf.save('my_document.pdf');
+                });
+            });
+        });
+
+</script>
+
+</body>
+</html>

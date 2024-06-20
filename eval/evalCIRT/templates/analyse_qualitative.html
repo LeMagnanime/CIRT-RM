@@ -1,0 +1,119 @@
+
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/background.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+          background-color: #e5e5f7;
+          opacity: 0.8;
+          background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #e5e5f7 10px), repeating-linear-gradient(#444cf755, #444cf7);
+        }
+        h1 {
+            font-family: 'Roboto', sans-serif;
+  font-size: 3rem;
+            background-color: #444cf7;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+h1:hover {
+  transform: scale(1.1);
+}
+ /* Style pour le sidebar */
+ .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+    }
+
+    /* Style pour le contenu de la page */
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 10px 20px;
+}
+
+nav .logo a {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-right: 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+nav ul li a:hover {
+  color: #ccc;
+}
+
+      </style>
+    <title>Company Information</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+          <a href="#">Mon logo</a>
+        </div>
+        <ul>
+          <li><a href="#">login</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    <div class="sidebar">
+        <h2>Mon sidebar</h2>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Analyse</a></li>
+        </ul>
+      </div> 
+    
+      
+      
+    <div align="middle" >
+    <h1>company Information</h1>
+    <form method="post" class = "post-form"> 
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+        <a href="{% url 'nouveau_projet' %}">Retour</a>
+    </form>
+    
+</div>
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+{% extends 'analyse_risques/main.html' %}
+
+{% block content %}
+ <style>
+    .card-body{
+      max-height: 600px;
+      overflow: auto;
+    }
+ </style>
+
+<div class="container-fluid">
+  <!-- Page Heading --> 
+  
+          <!-- page content -->
+          <div class="card shadow mb-4 mt-4">
+            <div class="card-body mt-3">
+                {% include 'analyse_risques/navigation.html' %} 
+                <hr>  
+                <div id="table_recette" class="content-table"> 
+                  
+                  {% for asset in actifs %}
+                  <table class="table table-sm dataTable_actif">
+                    <thead class="thead-dark">
+                      <tr>
+                          <th colspan="11">{{ asset.nom_actif }}</th>
+                      </tr>
+                      <tr>
+                          <th>Vulnérabilité</th>
+                          <th>Menaces</th>
+                          <th>Risque</th>
+                          <th>Facteur d'exposition</th>
+                          <th>SLE</th>
+                          <th>Probabilité d'occurrence(ARO)</th>
+                          <th>Impact (C)</th>
+                          <th>Impact (I)</th>
+                          <th>Impact (D)</th> 
+                          <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                      {% for evaluation in asset.evaluationrisque_set.all %}
+                      <tr>
+                          <td>{{ evaluation.vulnerabilite }}</td>
+                          <td>{{ evaluation.menaces }}</td>
+                          <td>{{ evaluation.risque }}</td>
+                          <td>{{ evaluation.facteur_exposition }} %</td>
+                          <td>{{ evaluation.sle }}</td>
+                          <td>{{ evaluation.probabilite_occurrence }}</td>
+                          <td>
+                            {% if evaluation.impact_c %}
+                              {{ evaluation.impact_c }}
+                            {% else %}
+                              -
+                            {% endif %}
+                          </td>
+                          <td>
+                            {% if evaluation.impact_i %}
+                              {{ evaluation.impact_i }}
+                            {% else %}
+                              -
+                            {% endif %}
+                          </td>
+                          <td>
+                            {% if evaluation.impact_d %}
+                              {{ evaluation.impact_d }}
+                            {% else %}
+                              -
+                            {% endif %}
+                          </td>  
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                          
+                        <td>   
+                          <a type="button" href="" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#exampleModal-{{ asset.id }}">
+                            <i class="fas fa-plus"></i>
+                          </a>
+
+                          <div class="modal fade" id="exampleModal-{{ asset.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <form method="post" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header justify-content-center">
+                                <h5 class="modal-title modal-title-custom" id="exampleModalLabel">Ajout d'une vulnérabilité. <small>{{ asset.nom_actif }}</small></h5> 
+                                </div>
+                                <div class="modal-body"> 
+                                    {% csrf_token %}
+                                    <div class="row">
+                                      <div class="form-group col-md-6"> 
+                                          <label for="{{ form.actif.id_for_label }}">Actif</label> 
+                                          <select id="{{ form.actif.id_for_label }}" name="{{ form.actif.name }}" class="form-control"> 
+                                            {% for value, label in form.actif.field.choices %}
+                                              <option value="{{ value }}" {% if value == asset.id %}selected{% endif %}>
+                                                {{ label }}
+                                              </option>
+                                            {% endfor %}
+                                          </select>
+                                      </div>
+                                      <div class="form-group col-md-6"> 
+                                          <label for="{{ form.menaces.id_for_label }}">Menace</label>
+                                          {{ form.menaces }}
+                                      </div>
+                                      <div class="form-group col-md-6"> 
+                                          <label for="{{ form.vulnerabilite.id_for_label }}">Vulnerabilite</label>
+                                          {{ form.vulnerabilite }}
+                                      </div>
+                                      <div class="form-group col-md-6"> 
+                                          <label for="{{ form.probabilite_occurrence.id_for_label }}">Probabilité d'occurrence</label>
+                                          {{ form.probabilite_occurrence }}
+                                      </div> 
+                                      <div class="form-group col-md-12"> 
+                                          <label for="{{ form.facteur_exposition.id_for_label }}">Facteur d'exposition</label>
+                                          {{ form.facteur_exposition }}
+                                      </div> 
+                                  </div>
+                                    <input type="hidden" name="actif_{{ asset.pk }}" value="1"> 
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-success">Enregistrer</button>
+                                </div>
+                            </div>
+                            </form>
+                          </div>
+                        </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>  
+            
+                        <td>
+                          
+                        </td> 
+                    </tr> 
+                    </tfoot>
+                  </table>
+                  <br>
+                  {% endfor %}
+                  <br><br>
+                  <a type="button" href="{% url 'vulnerabilite' %}" class="btn btn-info btn-sm">Analyse des risques <i class="fas fa-arrow-right"></i>
+                  </a type="button">
+                </div> 
+            </div>
+          </div>  
+      
+</div>
+  
+
+{% endblock %}

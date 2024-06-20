@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ANALYSE DES RISQUES</title>
+  <style>
+    /* Votre style CSS ici */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .add-button, .remove-button {
+      display: block;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<h2>Tableau des Vulnérabilités</h2>
+
+<div id="vulnerabilities"></div>
+
+<button id="okButton" onclick="okClicked()">Ok</button>
+<button id="returnButton" onclick="returnClicked()">Retour</button>
+
+<script>
+  // Tableau des actifs IT et leurs vulnérabilités
+  var actifs = [
+    { nom: "Ordinateurs laptop", vuln: [], menaces: [], risque: [], probOccurrence: [], impactC: [], impactI: [], impactD: [], criticite: [] },
+    { nom: "Ordinateurs desktop", vuln: [], menaces: [], risque: [], probOccurrence: [], impactC: [], impactI: [], impactD: [], criticite: [] },
+    { nom: "serveurs", vuln: [], menaces: [], risque: [], probOccurrence: [], impactC: [], impactI: [], impactD: [], criticite: [] },
+
+    // Ajoutez les autres actifs ici
+  ];
+
+  // Fonction pour ajouter une vulnérabilité à un actif
+  function ajouterVulnerabilite(actif) {
+    var table = document.getElementById("table_" + actif.nom.replace(/ /g, '_'));
+    var newRow = table.insertRow(-1);
+    newRow.innerHTML = `
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td>
+                    <button class="remove-button" onclick="supprimerVulnerabilite(this)">-</button>
+                </td>
+            `;
+  }
+
+  // Fonction pour supprimer une vulnérabilité d'un actif
+  function supprimerVulnerabilite(button) {
+    var row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+  }
+
+  // Générer les tableaux pour chaque actif
+  actifs.forEach(function(actif) {
+    var table = document.createElement("table");
+    table.id = "table_" + actif.nom.replace(/ /g, '_');
+    table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th colspan="9">${actif.nom}</th>
+                    </tr>
+                    <tr>
+                        <th>Vulnérabilité</th>
+                        <th>Menaces</th>
+                        <th>Risque</th>
+                        <th>Probabilité d'occurrence</th>
+                        <th>Impact (C)</th>
+                        <th>Impact (I)</th>
+                        <th>Impact (D)</th>
+                        <th>Criticité</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td><input type="text"></td>
+                        <td>
+                            <button class="remove-button" onclick="supprimerVulnerabilite(this)">-</button>
+                        </td>
+                    </tr>
+                    <button class="add-button" onClick="ajouterVulnerabilite(${JSON.stringify(actif)})">+</button>
+                </tbody>
+            `;
+    document.getElementById("vulnerabilities").appendChild(table);
+  });
+//${JSON.stringify(actif)}
+  // Fonction pour gérer le clic sur le bouton "Ok"
+  function okClicked() {
+    // Rediriger vers la page Diagram.html
+    window.location.href = "Diagram.html";
+  }
+
+  // Fonction pour gérer le clic sur le bouton "Retour"
+  function returnClicked() {
+    // Rediriger vers la page AssetsList.html
+    window.location.href = "AssetsList.html";
+  }
+  // Récupérer les actifs sélectionnés du paramètre de requête
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+var selectedAssets = getUrlParameter('selectedAssets');
+selectedAssets = JSON.parse(selectedAssets);
+
+// Utiliser les actifs sélectionnés sur la page tableau_vulnerabilite.html
+console.log(selectedAssets);
+
+</script>
+</body>
+</html>

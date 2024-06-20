@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Tableau</h1>
+  <table id="maTable" border="1">
+    <thead>
+      <tr>
+        <th style="background-color: grey;">Réponse</th>
+        <th style="background-color: grey;">Maturité</th>
+        <th style="background-color: grey;">Risque</th>
+        <th style="background-color: grey;">ID Risque</th>
+        <th style="background-color: grey;">Gravité</th>
+        <th style="background-color: grey;">Occurrence</th>
+        <th style="background-color: grey;">Risque Brut</th>
+        <th style="background-color: grey;">Détection</th>
+        <th style="background-color: grey;">Criticité</th>
+        <th style="background-color: grey;">Recommandation</th>
+        <th style="background-color: grey;">Responsable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ tableau.Reponse }}</td>
+        <td>{{ tableau.maturite }}</td>
+        <td>{{ tableau.risque }}</td>
+        <td>{{ tableau.id_risque }}</td>
+        <td>{{ tableau.gravite }}</td>
+        <td>{{ tableau.occurence }}</td>
+        <td>{{ tableau.risque_brute }}</td>
+        <td>{{ tableau.detection }}</td>
+        <td>{{ tableau.criticite }}</td>
+        <td>{{ tableau.responsable }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}

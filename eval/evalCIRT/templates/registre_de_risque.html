@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registre de Risques</title>
+</head>
+
+<body>
+    <h1>Registre de Risques</h1>
+
+    <!-- Formulaire pour ajouter/modifier les risques -->
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Risque</th>
+                    <th>Risque</th>
+                    <th>Gravité</th>
+                    <th>Occurrence</th>
+                    <th>Détection</th>
+                    <th>Criticité</th>
+                    <th>Recommandation</th>
+                    <th>Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Affichage des risques enregistrés -->
+                {% for risque in risques %}
+                <tr>
+                    <td>{{ risque.id_risque }}</td>
+                    <td>{{ risque.risque }}</td>
+                    <td>{{ risque.gravite }}</td>
+                    <td>{{ risque.occurence }}</td>
+                    <td>{{ risque.detection }}</td>
+                    <td>{{ risque.criticite }}</td>
+                    <td>{{ risque.recommandation }}</td>
+                    <td>{{ risque.responsable }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Boutons d'action -->
+        <button type="submit">Enregistrer</button>
+       
+    </form>
+</body>
+
+</html>

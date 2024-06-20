@@ -1,0 +1,29 @@
+{% extends 'analyse_risques/main.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Information</title>
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        .post-form {
+            width: 50%;  
+        }
+    </style>{% endblock %}
+</head>
+<body>{% block content %}
+    <h1>company Information</h1>
+    <form method="post" class = "post-form"> 
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+        <a href="{% url 'nouveau_projet' %}">Retour</a>
+
+    </form>{% endblock %}
+</body>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</html>
