@@ -20,6 +20,11 @@ from django.shortcuts import render
 import os
 import pandas
 
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
+
+genai.configure(api_key="AIzaSyBtzqb51YGOAWy9a5zCvNcvEfST3NHvvKY")
+
 # Créez le répertoire s'il n'existe pas
 #media_root = settings.MEDIA_ROOT
 #documents_dir = os.path.join(media_root, 'document')
@@ -193,9 +198,41 @@ def index(request):
    # return render(request, 'index.html')
 
 
-import os
-from django.conf import settings
+generation_config = {
+  "temperature": 0.4,
+  "top_p": 0.95,
+  "top_k": 64,
+  "max_output_tokens": 8192,
+  "response_mime_type": "application/json",
+}
 
+model = genai.GenerativeModel(
+  model_name="gemini-1.5-flash",
+  generation_config=generation_config,
+  safety_settings = {HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT : HarmBlockThreshold.BLOCK_NONE},
+  # See https://ai.google.dev/gemini-api/docs/safety-settings
+  )
+chat_session = model.start_chat()
 
+def get_gpt_response(request):
+    if request.method == 'POST':
+        user_input = request.POST.get('user_input')
+        
+        # Configurer la clé API OpenAI
+        #openai.api_key = os.getenv('API_KEY')
+        
+        try:
+            # Effectuer une requête à l'API OpenAI
+            response = chat_session.send_message(user_input)
+            
+            # Extraire la réponse générée par le modèle
+            gpt_response = response.text
+            print(gpt_response)
+            return JsonResponse({'response': gpt_response})
+        
+        except openai.error.OpenAIError as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 

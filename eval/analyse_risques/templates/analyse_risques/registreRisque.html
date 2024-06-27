@@ -1,0 +1,68 @@
+{% extends 'analyse_risques/main.html' %}
+
+{% block content %}
+<style>
+  .card-body{
+    max-height: 100px;
+    overflow: auto;
+  }
+</style>
+  <h1>REGISTRE DES RISQUES</h1>
+  <table class="table table-sm dataTable_actif">
+    <thead class="thead-dark">
+      <tr>
+        <th>Risque</th>
+        <th>Probabilité d'occurrence</th>
+        <th>Impact Financier</th>
+        <th>Risque Brut</th>
+        <th>Risque Résiduel</th>
+        <th>Recommandation</th>
+      </tr>
+    </thead>
+    <tbody>
+        
+      {% for evaluation in asset.evaluationrisque_set.all %}
+      <tr>
+        <td>{{ EvaluationRisque.risque }}</td>
+        <td>{{ EvaluationRisque.probabilite_occurrence }}</td>
+        <td>{{ EvaluationRisque.Impact_financier }}</td>
+        <td>{{ EvaluationRisque.valeur_risque }}</td>
+        <td>{{ EvaluationRisque. }}</td>
+        <td>{{ EvaluationRisque. }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+      
+  </table>
+  
+  <div>
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  
+
+{% endblock %}

@@ -24,7 +24,7 @@
                 }
 
                 const data = await response.json();
-                const gptResponse = data.response || data.error;
+                const gptResponse = data.response;
                 const textarea = document.getElementById('userInput');
                 textarea.value += "\n\nGPT: " + gptResponse;
             } catch (error) {

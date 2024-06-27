@@ -14,32 +14,44 @@ import openai
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import os
+import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 openai.api_key = 'API_KEY'
 
+genai.configure(api_key="AIzaSyBtzqb51YGOAWy9a5zCvNcvEfST3NHvvKY")
+
+generation_config = {
+  "temperature": 0.4,
+  "top_p": 0.95,
+  "top_k": 64,
+  "max_output_tokens": 8192,
+  "response_mime_type": "application/json",
+}
+
+model = genai.GenerativeModel(
+  model_name="gemini-1.5-flash",
+  generation_config=generation_config,
+  safety_settings = {HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT : HarmBlockThreshold.BLOCK_NONE},
+  # See https://ai.google.dev/gemini-api/docs/safety-settings
+  )
+chat_session = model.start_chat(
+    history=[]
+)
+
 def get_gpt_response(request):
+    #print("1")
     if request.method == 'POST':
         user_input = request.POST.get('user_input')
         
         # Configurer la clé API OpenAI
         openai.api_key = os.getenv('API_KEY')
-        
-        try:
-            # Effectuer une requête à l'API OpenAI
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": user_input}
-                ]
-            )
+        print(user_input)
+        response = chat_session.send_message(user_input)
             
             # Extraire la réponse générée par le modèle
-            gpt_response = response.choices[0].message['content']
-            
-            return JsonResponse({'response': gpt_response})
-        
-        except openai.error.OpenAIError as e:
-            return JsonResponse({'error': str(e)}, status=500)
+        gpt_response = response.text
+        #print(response)
+        return JsonResponse({'response': gpt_response})
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
@@ -86,8 +98,13 @@ def vulnerabilite(request):
     
     return render(request, "analyse_risques/analyse.html", context)
 
+
+def registre_risque(request):
+    return render(request, "analyse_risques/registreRisque.html")
+
 def exemple(request):
     return render(request, "exemple.html")
+
 
 def essaie(request):
     if request.method == 'POST':

@@ -22,7 +22,7 @@
                   <table class="table table-sm dataTable_actif">
                     <thead class="thead-dark">
                       <tr>
-                          <th colspan="11">{{ asset.nom_actif }}</th>
+                          <th colspan="8">{{ asset.nom_actif }}</th>
                       </tr>
                       <tr>
                           <th>Vulnérabilité</th>
@@ -31,10 +31,8 @@
                           <th>Facteur d'exposition</th>
                           <th>SLE</th>
                           <th>Probabilité d'occurrence(ARO)</th>
-                          <th>Impact (C)</th>
-                          <th>Impact (I)</th>
-                          <th>Impact (D)</th> 
-                          <th></th>
+                          <th>Impact financier</th> 
+                          <th>Valeur du risque</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -44,30 +42,11 @@
                           <td>{{ evaluation.vulnerabilite }}</td>
                           <td>{{ evaluation.menaces }}</td>
                           <td>{{ evaluation.risque }}</td>
-                          <td>{{ evaluation.facteur_exposition }} %</td>
-                          <td>{{ evaluation.sle }}</td>
+                          <td>{{ evaluation.facteur_exposition }} </td>
+                          <td>{{ evaluation.sle|floatformat:"2" }}</td>
                           <td>{{ evaluation.probabilite_occurrence }}</td>
-                          <td>
-                            {% if evaluation.impact_c %}
-                              {{ evaluation.impact_c }}
-                            {% else %}
-                              -
-                            {% endif %}
-                          </td>
-                          <td>
-                            {% if evaluation.impact_i %}
-                              {{ evaluation.impact_i }}
-                            {% else %}
-                              -
-                            {% endif %}
-                          </td>
-                          <td>
-                            {% if evaluation.impact_d %}
-                              {{ evaluation.impact_d }}
-                            {% else %}
-                              -
-                            {% endif %}
-                          </td>  
+                          <td>{{ evaluation.impact_financier|floatformat:"2" }} FCFA</td>  
+                          <td>{{ evaluation.valeur_risque|floatformat:"2" }} FCFA</td>
                       </tr>
                       {% endfor %}
                     </tbody>

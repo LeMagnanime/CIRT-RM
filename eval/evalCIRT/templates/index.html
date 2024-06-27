@@ -426,8 +426,41 @@ function clearNuSMVCode() {
     document.getElementById("nusmv_code").value = ""; // Efface le contenu du champ de texte
 }
 
+    async function fetchGPTResponse()  {
+        const userInput = document.getElementById('userInput').value;
+        try {
+            const response = await fetch('/api/get_gpt_response/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: new URLSearchParams({
+                    'user_input': userInput
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const gptResponse = data.response;
+            const textarea = document.getElementById('userInput');
+            textarea.value += "\n\nGPT: " + gptResponse;
+        } catch (error) {
+            const textarea = document.getElementById('userInput');
+            textarea.value += "\n\nError: " + error.message;
+        }
+    }
 </script>
+<textarea id="userInput" rows="10" cols="20"></textarea><br>
+<button onclick="fetchGPTResponse()">Get Response</button>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
     {% endblock %}
+
+
 </body>
 </html>
