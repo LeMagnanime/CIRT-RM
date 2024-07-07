@@ -1,7 +1,4 @@
-
-
 {% load static %}
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +19,8 @@
         .column {
             flex: 1;
             padding: 10px;
+            display: flex;
+            flex-direction: column;
         }
         #petri-net {
             border: 1px solid #ccc;
@@ -35,90 +34,86 @@
             pointer-events: none;
         }
         #petri-net {
-    position: relative;
-    width: 100%;
-    height: 80vh;
-    border: 1px solid black;
-    overflow: hidden;
-}
-
-.place, .transition {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 50%;
-    background-color: yellow;
-}
-
-.transition {
-    border-radius: 0;
-    background-color: green;
-}
-
-.arc {
-    stroke: red;
-    stroke-width: 2px;
-}
-
-.controls {
-    margin-bottom: 10px;
-}
-.black-token {
-    width: 10px;
-    height: 10px;
-    background-color: black;
-    border-radius: 50%;
-}
-.token {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: black;
-    border-radius: 50%;
-    display: block;
-}
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+        .place, .transition {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            background-color: yellow;
+        }
+        .transition {
+            border-radius: 0;
+            background-color: green;
+        }
+        .arc {
+            stroke: red;
+            stroke-width: 2px;
+        }
+        .controls {
+            margin-bottom: 10px;
+        }
+        .black-token {
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+        }
+        .token {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border-radius: 50%;
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .bottom-section {
+            margin-top: auto;
+        }
     </style>
 </head>
 <body>
     {% block content %}
     <div class="column">
-        <h1>Petri Net Simulator</h1>
+        <h1>Simulateur du Réseau de Petri</h1>
         <div class="controls mb-3">
             <button class="btn btn-primary" onclick="addPlace()">+ Place</button>
             <button class="btn btn-primary" onclick="addTransition()">+ Transition</button>
@@ -132,7 +127,7 @@
         </div>
     </div>
     <div class="column">
-      <h1>NuSMV Web Interface</h1>
+      <h1>Interface NuSMV</h1>
       <form method="post">
           {% csrf_token %}
           <textarea name="nusmv_code" rows="20" cols="40" class="form-control mb-3">{{ nusmv_code }}</textarea>
@@ -142,6 +137,10 @@
       <h2>Result:</h2>
       <pre>{{ result }}</pre>
       {% endif %}
+      <div class="bottom-section">
+          <textarea id="userInput" rows="10" cols="20" class="form-control mb-3"></textarea>
+          <button onclick="fetchGPTResponse()" class="btn btn-secondary">Get Response</button>
+      </div>
     </div>
     
     <script>
@@ -454,13 +453,8 @@ function clearNuSMVCode() {
         }
     }
 </script>
-<textarea id="userInput" rows="10" cols="20"></textarea><br>
-<button onclick="fetchGPTResponse()">Get Response</button>
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
     {% endblock %}
-
-
 </body>
 </html>

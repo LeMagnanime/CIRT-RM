@@ -69,11 +69,10 @@ class EvaluationRisque(models.Model):
     facteur_exposition = models.FloatField()
     probabilite_occurrence = models.DecimalField(max_digits=3, decimal_places=2) #ou ARO(Annual rate of occurence)
     sle = models.FloatField(default=0) #facteur_expostion * valeur_actif
-    #impact_c = models.IntegerField(null=True, blank=True) 
+    impact_financier = models.FloatField(null=True, blank=True) 
+     #impact_c = models.IntegerField(null=True, blank=True) 
     #impact_i = models.IntegerField(null=True, blank=True)
     #impact_d = models.IntegerField(null=True, blank=True)
-    impact_financier = models.FloatField(null=True, blank=True) 
-    
 
     def __str__(self):
         return f"{self.actif}"

@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
+
+from .models import Asset, EvaluationRisque
 openai.api_key = 'API_KEY'
 
 genai.configure(api_key="AIzaSyBtzqb51YGOAWy9a5zCvNcvEfST3NHvvKY")
@@ -100,31 +102,26 @@ def vulnerabilite(request):
 
 
 def registre_risque(request):
-    return render(request, "analyse_risques/registreRisque.html")
+    actifs = Asset.objects.all()
+    context = {
+        'actifs': actifs, 
+    }
+    return render(request, "analyse_risques/registreRisque.html", context)
 
 def exemple(request):
     return render(request, "exemple.html")
 
 
 def essaie(request):
-    if request.method == 'POST':
-        # Récupérer le texte de l'utilisateur à partir du formulaire
-        user_input = request.POST.get('user_input')
-
-        # Envoyer la requête à l'API OpenAI
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_input}
-            ]
-        )
-
-        # Récupérer la réponse
-        ai_response = response['choices'][0]['message']['content'].strip()
-
-        # Passer la réponse à votre template
-        return render(request, 'analyse_risques/essaie.html', {'response': ai_response, 'user_input': user_input})
+    risques = EvaluationRisque.objects.select_related('actif').all()
+    risques_par_actif = {}
+    for risque in risques:
+        if risque.actif not in risques_par_actif:
+            risques_par_actif[risque.actif] = []
+        risques_par_actif[risque.actif].append(risque)
     
-    return render(request, 'analyse_risques/essaie.html')
+    context = {
+        'risques_par_actif': risques_par_actif
+    }
 
+    return render(request, 'analyse_risques/essaie.html', context)

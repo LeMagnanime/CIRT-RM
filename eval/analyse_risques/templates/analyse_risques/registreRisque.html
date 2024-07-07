@@ -3,66 +3,176 @@
 {% block content %}
 <style>
   .card-body{
-    max-height: 100px;
+    max-height: 600px;
     overflow: auto;
   }
+  .title-page{
+    font-weight:bold;
+    color:black;
+  }
+  
 </style>
-  <h1>REGISTRE DES RISQUES</h1>
-  <table class="table table-sm dataTable_actif">
-    <thead class="thead-dark">
-      <tr>
-        <th>Risque</th>
-        <th>Probabilité d'occurrence</th>
-        <th>Impact Financier</th>
-        <th>Risque Brut</th>
-        <th>Risque Résiduel</th>
-        <th>Recommandation</th>
-      </tr>
-    </thead>
-    <tbody>
-        
-      {% for evaluation in asset.evaluationrisque_set.all %}
-      <tr>
-        <td>{{ EvaluationRisque.risque }}</td>
-        <td>{{ EvaluationRisque.probabilite_occurrence }}</td>
-        <td>{{ EvaluationRisque.Impact_financier }}</td>
-        <td>{{ EvaluationRisque.valeur_risque }}</td>
-        <td>{{ EvaluationRisque. }}</td>
-        <td>{{ EvaluationRisque. }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-      
-  </table>
-  
-  <div>
-    <canvas id="myChart"></canvas>
+<div class="container-fluid">
+  <div class="card shadow mb-2 mt-1">
+    <div class="card-body"> 
+      <h3 class="title-page">Registre des risques</h3>
+    </div>
   </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <script>
-    const ctx = document.getElementById('myChart');
-  
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  </script>
-  
 
+  <div class="card shadow mb-4 mt-4">
+    <div class="card-body mt-3"> 
+      {% include 'analyse_risques/navigation.html' %}
+      <hr>
+      <table class="table table-sm dataTable_actif">
+        <thead class="thead-dark">
+          <tr>
+            <th>Risque</th>
+            <th>Probabilité d'occurrence</th>
+            <th>Impact Financier</th>
+            <th>Risque Brut</th>
+            <th>Risque Résiduel</th>
+            <th>Recommandation</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for asset in actifs %}
+            {% for evaluation in asset.evaluationrisque_set.all %}
+              <tr>
+                <td>{{ evaluation.risque }}</td>
+                <td>{{ evaluation.probabilite_occurrence }} </td>
+                <td>{{ evaluation.impact_financier }} XAF</td>
+                <td>{{ evaluation.valeur_risque }} XAF</td>
+                <td>{{ EvaluationRisque. }}</td>
+                <td>{{ EvaluationRisque. }}</td>
+                <td>
+                  <div class="d-flex justify-content-center">
+                      <a href=" " class="btn btn-info btn-sm mr-2">
+                          <i class="fas fa-info-circle"></i>
+                      </a>
+
+                      <a type="button" href="" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#exampleModal-{{ item.structure.id }}">
+                          <i class="fas fa-edit"></i>
+                      </a>
+
+                      <div class="modal fade" id="exampleModal-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <form method="post" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header justify-content-center">
+                              <h5 class="modal-title modal-title-custom" id="exampleModalLabel">Modification de l'actif : <small>{{ item.structure.nom }}</small></h5> 
+                              </div> 
+                              <div class="modal-body"> 
+                                  {% csrf_token %}
+                                  <div class="form-row">
+                                      <div class="form-group col-md-8">
+                                          {{ item.edit_form.nom.label_tag }} 
+                                          {{ item.edit_form.nom }}
+                                          {% if item.edit_form.errors %}
+                                              <div class="dange">
+                                                  {{ item.edit_form.errors.nom }}
+                                              </div>
+                                          {% endif %}
+                                      </div>
+                                      <div class="form-group col-md-4">
+                                          {{ item.edit_form.sigle.label_tag }}
+                                          {{ item.edit_form.sigle }}
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      {{ item.edit_form.categorie.label_tag }}
+                                      {{ item.edit_form.categorie }}
+                                      {% if item.edit_form.errors.categorie %}
+                                          <div class="text-danger">
+                                              {{ item.edit_form.errors.categorie }}
+                                          </div>
+                                      {% endif %}
+                                  </div>
+                                  <div class="form-group"> 
+                                      {{ item.edit_form.description.label_tag }}
+                                      {{ item.edit_form.description }}
+                                  </div>
+                                  <div class="form-group"> 
+                                      {{ item.edit_form.adresse.label_tag }}
+                                      {{ item.edit_form.adresse }}
+                                      {% if item.edit_form.errors.adresse %}
+                                          <div class="text-danger">
+                                              {{ item.edit_form.errors.adresse }}
+                                          </div>
+                                      {% endif %}
+                                  </div>
+                                  <div class="form-row">
+                                      <div class="form-group col-md-4"> 
+                                          {{ item.edit_form.email.label_tag }}
+                                          {{ item.edit_form.email }}
+                                      </div>
+                                      <div class="form-group col-md-4">
+                                          {{ item.edit_form.telephone.label_tag }}
+                                          {{ item.edit_form.telephone }}
+                                          {% if item.edit_form.errors.telephone %}
+                                              <div class="text-danger">
+                                                  {{ item.edit_form.errors.telephone }}
+                                              </div>
+                                          {% endif %}
+                                      </div> 
+                                      <div class="form-group col-md-4">
+                                          {{ item.edit_form.photo.label_tag }}
+                                          {{ item.edit_form.photo }}
+                                          {% if item.edit_form.errors.photo %}
+                                              <div class="text-danger">
+                                                  {{ item.edit_form.errors.photo }}
+                                              </div>
+                                          {% endif %}
+                                      </div>
+                                      <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                      <input type="hidden" name="edit_structure" value="1">
+                                  </div> 
+                              </div>
+                              <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                              <button type="submit" class="btn btn-success">Enregistrer</button>
+                              </div>
+                          </div>
+                          </form>
+                      </div>
+
+
+                      <a type="button" href="" class="btn btn-danger btn-sm mr-2" data-toggle="modal" data-target="#modaldelete-{{ item.structure.id }}">
+                          <i class="fas fa-trash"></i>
+                      </a>
+
+
+                      <form method="post" class="modal fade" id="modaldelete-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header justify-content-center">
+                                <h5 class="modal-title modal-title-custom">
+                                   Suppréssion de l'actif : <small style="font-style: italic;">{{ item.structure.nom }}</small>
+                                </h5> 
+                              </div>
+                              <div class="modal-body"> 
+                                  {% csrf_token %}
+                                  <p>Voulez-vous vraiment supprimer la structure <span style="color:rgb(61, 61, 255)">«{{ item.structure.nom }}»</span> ?</p>
+                                  {{ item.delete_form }}
+                                  <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                  <input type="hidden" name="delete_structure" value="1">
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="submit" class="btn btn-success">valider</button> 
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
+                              </div>
+                            </div>
+                          </div>
+                      </form>
+
+                  </div>
+              </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+          
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}

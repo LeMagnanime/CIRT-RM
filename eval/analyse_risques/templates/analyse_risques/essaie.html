@@ -1,42 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT Integration</title>
-    <script>
-        async function fetchGPTResponse()  {
-            const userInput = document.getElementById('userInput').value;
-            try {
-                const response = await fetch('/api/get_gpt_response/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: new URLSearchParams({
-                        'user_input': userInput
-                    })
-                });
+{% extends 'analyse_risques/main.html' %}
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+{% block content %}
+ <style> 
+    .titre-actif{
+        font-size: 20px;
+        color: black;
+        font-weight: bold;
+    }
+    .page-title{
+        margin-bottom: 15px;
+        color: gray;   
+        font-weight:bold;
+    }
+ </style>
+
+<div class="container-fluid">
+  <!-- Page Heading --> 
+  
+          <!-- page content -->
+          <div class="card shadow mb-4 mt-4">
+            <div class="card-body mt-3">
+                {% include 'analyse_risques/navigation.html' %} 
+                <hr>   
+                <h1 class="page-title mb-4">Dashboard</h1> 
+                <div class="row"> 
+                    {% for actif, risques in risques_par_actif.items %}
+                    <div class="col-sm-6">
+                        <h2 class="titre-actif text-center mb-4">{{ actif.nom_actif }}</h2>
+                        <canvas id="radarChart_{{ actif.id }}" width="100px" max-height="100px"></canvas>
+                    </div>
+                    {% endfor %} 
+                </div> 
+</div>
+
+<script>
+    Chart.register(ChartDataLabels);
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for actif, risques in risques_par_actif.items %}
+        var ctx = document.getElementById('radarChart_{{ actif.id }}').getContext('2d');
+        var radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [{% for risque in risques %}'{{ risque.risque }}',{% endfor %}],
+                datasets: [{
+                    label: 'Valeur du Risque',
+                    data: [{% for risque in risques %}{{ risque.valeur_risque }},{% endfor %}],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true
+                    }
                 }
-
-                const data = await response.json();
-                const gptResponse = data.response;
-                const textarea = document.getElementById('userInput');
-                textarea.value += "\n\nGPT: " + gptResponse;
-            } catch (error) {
-                const textarea = document.getElementById('userInput');
-                textarea.value += "\n\nError: " + error.message;
             }
-        }
-    </script>
-</head>
-<body>
-    <h1>GPT Integration</h1>
-    <textarea id="userInput" rows="10" cols="50"></textarea><br>
-    <button onclick="fetchGPTResponse()">Get Response</button>
-</body>
-</html>
+        });
+        {% endfor %}
+    });
+</script>
+
+{% endblock %}
