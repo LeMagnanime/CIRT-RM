@@ -9,4 +9,5 @@ urlpatterns = [
     path('essaie', views.essaie, name='essaie'),
     path('api/get_gpt_response/', views.get_gpt_response, name='get_gpt_response'), 
     path('registre/', views.registre_risque, name='registre_risque'),
+    path('Rapport/', views.Rapport, name='Rapport'),
 ] 

@@ -2,5 +2,6 @@
     <a href= "{% url 'home2' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" id="btn_planing"><i class="fas fa-calendar"></i> Cartographie des actifs</a>
     <a href= "{% url 'vulnerabilite' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'vulnerabilite' %}active{% endif %}" id="btn_notification"><i class="fas fa-calculator"></i> Analyse des risques</a>
     <a href= "{% url 'registre_risque' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'registre_risque' %}active{% endif %}" href=" " id="btn_depense"><i class="far fa-list-alt"></i> Registre des risques</a> 
-    <a href= "{% url 'essaie' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'registre_risque' %}active{% endif %}" href=" " id="btn_depense"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a> 
+    <a href= "{% url 'essaie' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'registre_risque' %}active{% endif %}" href=" " id="btn_depense"><i class="fas fa-tachometer-alt"></i>Tableau de bord</a> 
+    <a href= "{% url 'Rapport' %}" class="btn btn-light btn-sm ml-1 {% if request.resolver_match.url_name == 'registre_risque' %}active{% endif %}" href=" " id="btn_depense"><i class="fas fa-file-prescription"></i> Rapport</a> 
 </div>

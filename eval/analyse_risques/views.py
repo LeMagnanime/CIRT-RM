@@ -125,3 +125,6 @@ def essaie(request):
     }
 
     return render(request, 'analyse_risques/essaie.html', context)
+
+def Rapport(request):
+    return render(request, "analyse_risques/Rapport.html")

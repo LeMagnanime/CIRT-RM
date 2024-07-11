@@ -89,18 +89,4 @@ class EvaluationRisque(models.Model):
 
         # Appeler la méthode save() originale pour enregistrer l'objet
         super(EvaluationRisque, self).save(*args, **kwargs)
-        
-class RegistreRisque(models.Model):
-    risque = models.CharField(max_length=200)
-    #actif = models.ForeignKey(Asset, on_delete=models.CASCADE)	
-    menaces = models.ForeignKey(Menace, null=True, blank=True, on_delete=models.CASCADE)	
-    vulnerabilite = models.ForeignKey(Vunlerabilite, on_delete=models.CASCADE) 
-    facteur_exposition = models.DecimalField(max_digits=3, decimal_places=2)
-    probabilite_occurrence = models.IntegerField() #ou ARO(Annual rate of occurence)
-    sle = models.FloatField(default=0) #facteur_expostion * valeur_actif
-    ALE = models.IntegerField(null=True, blank=True) #SLE*ARO
-    #impact_i = models.IntegerField(null=True, blank=True)
-    #impact_d = models.IntegerField(null=True, blank=True)
-    criticite = models.IntegerField(null=True, blank=True)
-    def __str__(self):
-        return f"{self.risque}"
+    

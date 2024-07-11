@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport d'Analyse des Risques</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+        }
+        header, section, footer {
+            margin-bottom: 20px;
+        }
+        .summary, .methods, .results, .recommendations {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .results table, .results th, .results td {
+            border: 1px solid #ccc;
+        }
+        .results th, .results td {
+            padding: 10px;
+            text-align: left;
+        }
+        .print-button, .save-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .print-button button, .save-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .print-button button:hover, .save-button button:hover {
+            background-color: #2980b9;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        function printPage() {
+            window.print();
+        }
+        function saveReport() {
+            // Fonction pour sauvegarder le rapport (peut être implémentée pour enregistrer les données modifiées)
+            alert('Rapport sauvegardé (fonctionnalité à implémenter)');
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Rapport d'Analyse des Risques</h1>
+    <p>Date : <strong><input type="text" value="11 Juillet 2024" /></strong></p>
+    <p>Auteur : <strong><input type="text" value="Nom de l'Auteur" /></strong></p>
+</header>
+
+<div class="print-button">
+    <button onclick="printPage()">Imprimer</button>
+</div>
+
+<div class="save-button">
+    <button onclick="saveReport()">Sauvegarder</button>
+</div>
+
+<section class="summary">
+    <h2>Résumé</h2>
+    <textarea rows="4">Ceci est un résumé de l'analyse des risques menée pour [Nom de l'Organisation]. L'objectif principal de cette analyse est d'identifier, quantifier et évaluer les risques liés à la sécurité des informations afin de proposer des solutions de mitigation appropriées.</textarea>
+</section>
+
+<section class="methods">
+    <h2>Méthodologie</h2>
+    <textarea rows="6">Nous avons utilisé la méthode FAIR (Factor Analysis of Information Risk) pour cette analyse. Les métriques suivantes ont été calculées :
+- SLE (Single Loss Expectancy) : Estimation de la perte financière résultant d'un seul incident de sécurité.
+- ARO (Annualized Rate of Occurrence) : Estimation du nombre de fois qu'un incident particulier est susceptible de se produire en une année.
+- ALE (Annual Loss Expectancy) : Estimation de la perte annuelle attendue, calculée comme le produit de la SLE et de l'ARO.
+    </textarea>
+</section>
+
+<section class="results">
+    <h2>Résultats</h2>
+    <p>Les résultats de l'analyse montrent une distribution des pertes potentielles, aidant à comprendre les risques auxquels l'organisation est exposée.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Risque</th>
+                <th>SLE (EUR)</th>
+                <th>ARO</th>
+                <th>ALE (EUR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" value="Risque 1" /></td>
+                <td><input type="text" value="10000" /></td>
+                <td><input type="text" value="0.5" /></td>
+                <td><input type="text" value="5000" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" value="Risque 2" /></td>
+                <td><input type="text" value="20000" /></td>
+                <td><input type="text" value="0.1" /></td>
+                <td><input type="text" value="2000" /></td>
+            </tr>
+            <!-- Ajoutez d'autres lignes de risques si nécessaire -->
+        </tbody>
+    </table>
+</section>
+
+<section class="recommendations">
+    <h2>Recommandations</h2>
+    <textarea rows="6">Sur la base des résultats de l'analyse, nous recommandons les actions suivantes pour atténuer les risques identifiés :
+- Mettre en place des mesures de sécurité supplémentaires pour réduire la probabilité d'occurrence des incidents les plus critiques.
+- Former le personnel aux meilleures pratiques en matière de sécurité de l'information.
+- Effectuer des audits réguliers pour identifier et corriger les vulnérabilités potentielles.
+    </textarea>
+</section>
+
+<footer>
+    <p>&copy; 2024 Nom de l'Organisation. Tous droits réservés.</p>
+</footer>
+
+</body>
+</html>

@@ -172,9 +172,13 @@
                       <tr>
                           
                         <td>   
-                          <a type="button" href="" class="btn btn-primary btn-sm mr-2" data-toggle="modal" data-target="#exampleModal-{{ asset.id }}">
-                            <i class="fa fa-plus"></i>
-                          </a>
+                          <button type="button" href="" class="btn btn-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#exampleModal-{{ asset.id }}">
+                            <i class="fa fa-plus"></i>Ajouter une Vulnérabilité
+                          </button>
+
+                          <button type="button" href="" class="btn btn-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#exampleModal-{{ asset.id }}">
+                            <i class="fas fa-file-invoice"></i>Charger un résultat de Scan de Vulnérabilité
+                          </button>
 
                           <div class="modal fade" id="exampleModal-{{ asset.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form method="post" class="modal-dialog modal-dialog-centered modal-lg" role="document">
