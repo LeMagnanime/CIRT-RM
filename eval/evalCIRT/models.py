@@ -61,3 +61,19 @@ class DonneeAdmin(admin.ModelAdmin):
     list_display = ['maturite', 'risque', 'Reponse', 'id_risque', 'occurence', 'risque_brute', 'detection', 'criticite', 'recommandation', 'responsable', 'gravite']
     list_filter = ('risque',)
     search_fields = ['risque', ]
+
+
+class Actifs(models.Model):
+    class Meta:
+        verbose_name = "Actif"
+    id = models.ForeignKey(TypeActif, on_delete=models.CASCADE, primary_key=True)
+    categorie = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    CPE_id = models.IntegerField()
+    Interface_physique = models.CharField(max_length=20)
+    Interface_logique = models.CharField(max_length=20)
+    #Send_packet ()
+    #Receive_packet ()
+    
+    def __str__(self):
+        return f"{self.id}"

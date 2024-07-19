@@ -47,6 +47,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('index/', TemplateView.as_view(template_name="index.html"), name='index'),
     path('', include('analyse_risques.urls')),
+    path('add_actif/', views.add_actif, name='add_actif'),
 
 
 

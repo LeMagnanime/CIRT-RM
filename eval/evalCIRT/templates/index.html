@@ -1,122 +1,13 @@
-{% load static %}
+{% extends 'analyse_risques/main.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NuSMV & Petri Net Simulator</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-    
-    <style>
-        body {
-            display: flex;
-            height: 100vh;
-        }
-        .column {
-            flex: 1;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-        #petri-net {
-            border: 1px solid #ccc;
-            height: 100%;
-            position: relative;
-        }
-        #svg-canvas {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        #petri-net {
-            position: relative;
-            width: 100%;
-            height: 80vh;
-            border: 1px solid black;
-            overflow: hidden;
-        }
-        .place, .transition {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 50%;
-            background-color: yellow;
-        }
-        .transition {
-            border-radius: 0;
-            background-color: green;
-        }
-        .arc {
-            stroke: red;
-            stroke-width: 2px;
-        }
-        .controls {
-            margin-bottom: 10px;
-        }
-        .black-token {
-            width: 10px;
-            height: 10px;
-            background-color: black;
-            border-radius: 50%;
-        }
-        .token {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: black;
-            border-radius: 50%;
-            display: block;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .bottom-section {
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
+{%  load static %}
+ 
     {% block content %}
     <div class="column">
         <h1>Simulateur du Réseau de Petri</h1>
         <div class="controls mb-3">
-            <button class="btn btn-primary" onclick="addPlace()">+ Place</button>
-            <button class="btn btn-primary" onclick="addTransition()">+ Transition</button>
+            <button class="btn btn-primary text-white btn-sm mr-2 mb-2" data-toggle="modal" data-target="#modalDepense" onclick="addPlace()"><i class="fas fa-plus fa-sm text-white-50"></i> Place</button>
+            <button class="btn btn-primary" onclick="addTransition()"><i class="fas fa-plus fa-sm text-white-50"></i>Transition</button>
             <button class="btn btn-danger" onclick="removeElement()">Remove</button>
             <button class="btn btn-secondary" onclick="clearNet()">Clear</button>
             <button class="btn btn-info" id="drawLineButton">Link</button>
@@ -269,7 +160,7 @@ function removeElement() {
 
 function clearNet() {
     document.getElementById('petri-net').innerHTML = '<svg id="svg-canvas" style="position:absolute; width:100%; height:100%; pointer-events:none;"></svg>';
-    places = [];
+     s = [];
     transitions = [];
     arcs = [];
     placeCounter = 1;
@@ -455,6 +346,200 @@ function clearNuSMVCode() {
 </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
-    {% endblock %}
-</body>
-</html>
+
+
+<div class="container-fluid">
+<!-- Page Heading --> 
+
+        <!-- page content -->
+        <div class="card shadow mb-4 mt-4">
+          <div class="card-body mt-3">
+              <!-- {% include 'analyse_risques/navigation.html' %} -->
+              <hr>  
+              <div id="table_recette" class="content-table"> 
+                <form method="post" class="modal fade" id="modalDepense" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header justify-content-center">
+                          <h5 class="modal-title modal-title-custom">
+                            Ajout d'un actif
+                          </h5> 
+                          </div>
+                          <div class="modal-body"> 
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <div class="modal-body"> 
+                            </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
+                                <button type="submit" class="btn btn-success">Valider</button> 
+                                </div>
+                            </div>
+                      </div>
+                  </form>
+
+                <table class="table table-sm table-striped dataTable_actif" width="100%">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Catégorie</th>
+                            <th>Description</th>
+                            <th>CPE_id </th> 
+                            <th>Interfaces physiques </th>
+                            <th>Interfaces logiques </th>
+                            <th></th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        {% for actif in actifs %}
+                            <tr>
+                                <td>{{ actif.id }}</td>
+                                <td>{{ actif.Catégorie }}</td>
+                                <td>{{ actif.description }}</td>
+                                <td>{{ actif.CPE_id }}</td>
+                                <td>{{ actif.Interface_physique }}</td>
+                                <td>{{ Interfaces_logique }}</td>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href=" " class="btn btn-info btn-sm mr-2">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+
+                                        <a type="button" href="" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#exampleModal-{{ item.structure.id }}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <div class="modal fade" id="exampleModal-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <form method="post" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header justify-content-center">
+                                                <h5 class="modal-title modal-title-custom" id="exampleModalLabel">Modification de l'actif : <small>{{ item.structure.nom }}</small></h5> 
+                                                </div> 
+                                                <div class="modal-body"> 
+                                                    {% csrf_token %}
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-8">
+                                                            {{ item.edit_form.nom.label_tag }} 
+                                                            {{ item.edit_form.nom }}
+                                                            {% if item.edit_form.errors %}
+                                                                <div class="dange">
+                                                                    {{ item.edit_form.errors.nom }}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            {{ item.edit_form.sigle.label_tag }}
+                                                            {{ item.edit_form.sigle }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        {{ item.edit_form.categorie.label_tag }}
+                                                        {{ item.edit_form.categorie }}
+                                                        {% if item.edit_form.errors.categorie %}
+                                                            <div class="text-danger">
+                                                                {{ item.edit_form.errors.categorie }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="form-group"> 
+                                                        {{ item.edit_form.description.label_tag }}
+                                                        {{ item.edit_form.description }}
+                                                    </div>
+                                                    <div class="form-group"> 
+                                                        {{ item.edit_form.adresse.label_tag }}
+                                                        {{ item.edit_form.adresse }}
+                                                        {% if item.edit_form.errors.adresse %}
+                                                            <div class="text-danger">
+                                                                {{ item.edit_form.errors.adresse }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4"> 
+                                                            {{ item.edit_form.email.label_tag }}
+                                                            {{ item.edit_form.email }}
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            {{ item.edit_form.telephone.label_tag }}
+                                                            {{ item.edit_form.telephone }}
+                                                            {% if item.edit_form.errors.telephone %}
+                                                                <div class="text-danger">
+                                                                    {{ item.edit_form.errors.telephone }}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div> 
+                                                        <div class="form-group col-md-4">
+                                                            {{ item.edit_form.photo.label_tag }}
+                                                            {{ item.edit_form.photo }}
+                                                            {% if item.edit_form.errors.photo %}
+                                                                <div class="text-danger">
+                                                                    {{ item.edit_form.errors.photo }}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                                        <input type="hidden" name="edit_structure" value="1">
+                                                    </div> 
+                                                </div>
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-success">Enregistrer</button>
+                                                </div>
+                                            </div>
+                                            </form>
+                                        </div>
+
+
+                                        <a type="button" href="" class="btn btn-danger btn-sm mr-2" data-toggle="modal" data-target="#modaldelete-{{ item.structure.id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+
+
+                                        <form method="post" class="modal fade" id="modaldelete-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal" role="document">
+                                              <div class="modal-content">
+                                                <div class="modal-header justify-content-center">
+                                                  <h5 class="modal-title modal-title-custom">
+                                                     Suppréssion de l'actif : <small style="font-style: italic;">{{ item.structure.nom }}</small>
+                                                  </h5> 
+                                                </div>
+                                                <div class="modal-body"> 
+                                                    {% csrf_token %}
+                                                    <p>Voulez-vous vraiment supprimer la structure <span style="color:rgb(61, 61, 255)">«{{ item.structure.nom }}»</span> ?</p>
+                                                    {{ item.delete_form }}
+                                                    <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                                    <input type="hidden" name="delete_structure" value="1">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">valider</button> 
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br><br>
+                
+              </div> 
+        </div>
+        </div>  
+    
+</div>
+{% endblock %}  
+<script>
+    document.getElementById('addPlaceBtn').addEventListener('click', function() {
+        // Show the modal form to add a new actif
+        document.getElementById('addActifModal').style.display = 'block';
+    });
+    
+    document.getElementById('closeModalBtn').addEventListener('click', function() {
+        // Hide the modal form
+        document.getElementById('addActifModal').style.display = 'none';
+    });
+    </script>

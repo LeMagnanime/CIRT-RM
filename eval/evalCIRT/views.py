@@ -22,6 +22,20 @@ import pandas
 
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from .models import Actifs
+from .forms import ActifForm
+
+def add_actif(request):
+    if request.method == 'POST':
+        form = ActifForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')  # Assuming 'index' is your main page
+    else:
+        form = ActifForm()
+    
+    actifs = Actifs.objects.all()
+    return render(request, 'analyse_risques/main.html', {'form': form, 'actifs': actifs})
 
 genai.configure(api_key="AIzaSyBtzqb51YGOAWy9a5zCvNcvEfST3NHvvKY")
 

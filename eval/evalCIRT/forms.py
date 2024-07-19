@@ -3,6 +3,7 @@ from .models import Company
 from django.forms import ModelForm
 from .models import Document
 from .models import Donnee
+from .models import Actifs
 
 class CompanyForm(ModelForm):
     class Meta:
@@ -18,3 +19,8 @@ class DonneeForm(forms.ModelForm):
     class Meta:
         model = Donnee
         fields = ['maturite', 'risque', 'Reponse', 'id_risque', 'occurence', 'gravite', 'detection', 'criticite', 'recommandation', 'risque_brute', 'responsable']
+
+class ActifForm(forms.ModelForm):
+    class Meta:
+        model = Actifs
+        fields = ['Id','Catégorie', 'Description', 'Interface_physique', 'Interface_logique']

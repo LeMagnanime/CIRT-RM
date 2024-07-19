@@ -23,7 +23,8 @@ class Asset(models.Model):
     cout_entretien = models.IntegerField()
     va = models.IntegerField()
     valeur_indisponibilite = models.IntegerField()
-    menaces = models.ManyToManyField('Menace', through='ActifMenace', blank=True)
+    criticite = models.CharField(max_length=1)  # Nouveau champ pour la criticité
+    #menaces = models.ManyToManyField('Menace', through='ActifMenace', blank=True)
     
     def __str__(self):
         return f"{self.nom_actif}"
@@ -50,7 +51,7 @@ class Vunlerabilite(models.Model):
     domaine = models.ForeignKey(Domaine, on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
-        return f"{self.nom}"
+        return f"{self.code_cve}"
 
 class ActifMenace(models.Model):
     actif = models.ForeignKey(Asset, on_delete=models.CASCADE)
@@ -89,4 +90,3 @@ class EvaluationRisque(models.Model):
 
         # Appeler la méthode save() originale pour enregistrer l'objet
         super(EvaluationRisque, self).save(*args, **kwargs)
-    

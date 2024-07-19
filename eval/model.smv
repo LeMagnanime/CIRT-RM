@@ -1,0 +1,13 @@
+MODULE main
+VAR
+    x: boolean;
+    y: boolean;
+    send: boolean;
+
+ASSIGN
+    init(x) := TRUE;
+    init(y) := FALSE;
+    init(send) := FALSE;
+
+LTLSPEC
+    G (NOT x & y => NOT send)

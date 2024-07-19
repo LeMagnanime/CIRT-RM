@@ -15,14 +15,15 @@
     </style>{% endblock %}
 </head>
 <body>{% block content %}
-    <h1>company Information</h1>
-    <form method="post" class = "post-form"> 
-        {% csrf_token %}
+    <div align="center">
+        <h1>company Information</h1>
+        <form method="post" class = "post-form"> 
+            {% csrf_token %}
 
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-        <a href="{% url 'nouveau_projet' %}">Retour</a>
-
+            {{ form.as_p }}
+            <button type="submit">OK</button>
+            <a href="{% url 'nouveau_projet' %}">Retour</a>
+    </div>
     </form>{% endblock %}
 </body>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>

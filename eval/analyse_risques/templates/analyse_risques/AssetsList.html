@@ -29,48 +29,24 @@
                           </h5> 
                           </div>
                           <div class="modal-body"> 
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="form-group col-md-6"> 
-                                    <label for="{{ form.type_actif.id_for_label }}">Type d'actif</label>
-                                    {{ form.type_actif }}
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <div class="modal-body"> 
+                                    1 - pas critique : Impact négligeable sur les opérations commerciales, causant des pertes financières insignifiantes et aucun dommage notable à la réputation.                          </div>
+                                    
+                                    2 - moins critique : Impact mineur sur les opérations commerciales, causant de petites pertes financières et des dommages négligeables à la réputation.
+                                    
+                                    3 - peu critique : Impact notable sur les opérations commerciales, causant des pertes financières modérées et des dommages potentiels à la réputation.
+                                    
+                                    4 - critique : Impact majeur sur les opérations commerciales, causant des pertes financières considérables et des dommages à la réputation.
+                                    
+                                    5 - Très critique : Impact catastrophique sur les opérations commerciales ou la conformité réglementaire, pouvant causer des dommages irréversibles ou des pertes financières importantes.
                                 </div>
-                                <div class="form-group col-md-6"> 
-                                    <label for="{{ form.nom_actif.id_for_label }}">Nom de l'actif</label>
-                                    {{ form.nom_actif }}
-                                </div>
-                                <div class="form-group col-md-12"> 
-                                    <label for="{{ form.description.id_for_label }}">Description</label>
-                                    {{ form.description }}
-                                </div>
-                                <div class="form-group col-md-6"> 
-                                    <label for="{{ form.valeur_unitaire_actif.id_for_label }}">Valeur unitaire</label>
-                                    {{ form.valeur_unitaire_actif }}
-                                </div>
-                                <div class="form-group col-md-6"> 
-                                    <label for="{{ form.cout_installation.id_for_label }}">Coût d'installation</label>
-                                    {{ form.cout_installation }}
-                                </div>
-                                <div class="form-group col-md-4"> 
-                                    <label for="{{ form.cout_entretien.id_for_label }}">Coût d'entretien</label>
-                                    {{ form.cout_entretien }}
-                                </div>
-                                <div class="form-group col-md-4"> 
-                                    <label for="{{ form.va.id_for_label }}">Valeur de l'actif</label>
-                                    {{ form.va }}
-                                </div>
-                                <div class="form-group col-md-4"> 
-                                    <label for="{{ form.valeur_indisponibiliteid_for_label }}">Valeur indisponibilité</label>
-                                    {{ form.valeur_indisponibilite }}
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
+                                <button type="submit" class="btn btn-success">Valider</button> 
                                 </div>
                             </div>
-                            <input type="hidden" name="new_depense" value="1">
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
-                            <button type="submit" class="btn btn-success">Valider</button> 
-                          </div>
-                      </div>
                       </div>
                   </form>
 
@@ -85,7 +61,8 @@
                             <th>Coût d'entretien</th>
                             <th>VA</th> 
                             <th>Valeur d'indisponibilité(/J)</th>
-                            <th></th>
+                            <th>Criticité</th>
+                            <th>Actions</th>
                         </tr>
                     </thead> 
                     <tbody>
@@ -99,6 +76,7 @@
                                 <td>{{ actif.cout_entretien }} FCFA</td>
                                 <td>{{ actif.va }} FCFA</td>
                                 <td>{{ actif.valeur_indisponibilite }} FCFA</td>
+                                <td>{{ actif.criticite }}</td> <!-- Affichage de la criticité -->
                                 <td>
                                     <div class="d-flex justify-content-center">
                                         <a href=" " class="btn btn-info btn-sm mr-2">
