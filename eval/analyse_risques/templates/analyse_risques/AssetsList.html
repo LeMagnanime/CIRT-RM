@@ -17,9 +17,10 @@
                 <button type="button" href="" class="btn btn-primary text-white btn-sm mr-2 mb-2" data-toggle="modal" data-target="#modalDepense">
                     <i class="fas fa-plus fa-sm text-white-50"></i> Ajouter un actif
                 </button>
-                <button type="button" href="" class="btn btn-primary text-white btn-sm mr-2 mb-2" data-toggle="modal" data-target="#modalDepense">
-                    <i class="fas fa-file-invoice"></i> charger un inventaire existant
-                </button>
+                    <input type="file" id="fileInput" style="display:none;" />
+                    <button type="button" class="btn btn-primary text-white btn-sm mr-2 mb-2" onclick="document.getElementById('fileInput').click();">
+                        <i class="fas fa-file-invoice"></i> Charger un inventaire existant
+                    </button>
                 <form method="post" class="modal fade" id="modalDepense" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                       <div class="modal-content">

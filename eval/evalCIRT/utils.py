@@ -2,7 +2,7 @@ import subprocess
 
 def run_nusmv(nusmv_code):
     file_path = 'model.smv'
-    nusmv_path = 'C:/Program Files/NuSMV-2.6.0-win64/NuSMV-2.6.0-win64/bin/NuSMV.exe'  # Chemin vers l'exécutable NuSMV
+    nusmv_path = 'C:/NuSMV-2.6.0-win64/NuSMV-2.6.0-win64/bin/NuSMV.exe'  # Chemin vers l'exécutable NuSMV
     with open(file_path, 'w') as f:
         f.write(nusmv_code)
     try:

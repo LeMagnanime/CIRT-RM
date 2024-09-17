@@ -7,6 +7,7 @@ from .models import DocumentAdmin
 from .models import Document
 from .models import Donnee
 from .forms import DonneeForm
+from .forms import *
 from django.shortcuts import render 
 from django.template.loader import render_to_string
 from bs4 import BeautifulSoup
@@ -35,7 +36,7 @@ def add_actif(request):
         form = ActifForm()
     
     actifs = Actifs.objects.all()
-    return render(request, 'analyse_risques/main.html', {'form': form, 'actifs': actifs})
+    return render(request, 'index.html', {'form': form, 'actifs': actifs})
 
 genai.configure(api_key="AIzaSyBtzqb51YGOAWy9a5zCvNcvEfST3NHvvKY")
 
@@ -184,7 +185,7 @@ def serve_flask_app(request):
 
     def run_nusmv(nusmv_code):
         file_path = 'model.smv'
-        nusmv_path = 'C:/Program Files/NuSMV-2.6.0-win64/NuSMV-2.6.0-win64/bin/NuSMV.exe'
+        nusmv_path = 'C:/NuSMV-2.6.0-win64/NuSMV-2.6.0-win64/bin/NuSMV.exe'
         with open(file_path, 'w') as f:
             f.write(nusmv_code)
         try:
@@ -201,15 +202,35 @@ def serve_flask_app(request):
 from .utils import run_nusmv
 
 def index(request):
+    form = ActifForm()
+    actifs = Actifs.objects.all()
+    
+    if request.method == "POST":
+        form = ActifForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Les actifs ont bien été enregistré" 
+            print(message)
+            return redirect('index2')
+        else:
+            print(form.errors)
+        
     result = ""
     nusmv_code = ""
     if request.method == 'POST':
         nusmv_code = request.POST.get('nusmv_code', '')
         result = run_nusmv(nusmv_code)
-    return render(request, 'index.html', {'nusmv_code': nusmv_code, 'result': result})
+        
+    context = {
+        'nusmv_code': nusmv_code, 
+        'result': result,
+        'form': form,
+        'actifs': actifs
+    }
+    return render(request, 'index.html', context)
 
 #def index(request):
-   # return render(request, 'index.html')
+    #return render(request, 'index.html')
 
 
 generation_config = {
@@ -248,5 +269,4 @@ def get_gpt_response(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=400)
-
 

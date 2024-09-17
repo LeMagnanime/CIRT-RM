@@ -1,13 +1,67 @@
 MODULE main
+
 VAR
-    x: boolean;
-    y: boolean;
-    send: boolean;
+    state : {S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11}; -- États du système
+    P2Srv : boolean;    -- PC2 a envoyé un paquet au serveur
+    RtP2 : boolean;     -- Le routeur a reçu un paquet de PC2
+    SAkP2 : boolean;    -- Le serveur a reçu un paquet de PC2
+    crash : boolean;    -- Le routeur plante
+    P2P1 : boolean;     -- PC2 envoie un paquet à PC1
+    P1AkP2 : boolean;   -- PC1 a reçu un paquet de PC2
+    P1P2 : boolean;     -- PC1 envoie un paquet à PC2
+    P2AkP1 : boolean;   -- PC2 a reçu un paquet de PC1
+    P1Srv : boolean;    -- PC1 envoie un paquet au serveur
+    RtP1 : boolean;     -- Le routeur a reçu un paquet de PC1
+    Drop : boolean;     -- Le routeur abandonne le paquet
 
 ASSIGN
-    init(x) := TRUE;
-    init(y) := FALSE;
-    init(send) := FALSE;
+    init(state) := S0;
+    init(P2Srv) := TRUE;
+    init(RtP2) := FALSE;
+    init(SAkP2) := FALSE;
+    init(crash) := FALSE;
+    init(P2P1) := FALSE;
+    init(P1AkP2) := FALSE;
+    init(P1P2) := FALSE;
+    init(P2AkP1) := FALSE;
+    init(P1Srv) := FALSE;
+    init(RtP1) := FALSE;
+    init(Drop) := FALSE;
 
-LTLSPEC
-    G (NOT x & y => NOT send)
+    next(state) :=
+        case
+            state = S0 : {S1, S5, S7, S9};
+            state = S1 : S2;
+            state = S2 : S3;
+            state = S3 : S4;
+            state = S4 : S5;
+            state = S5 : S6;
+            state = S6 : S7;
+            state = S7 : S8;
+            state = S8 : S9;
+            state = S9 : S10;
+            state = S10 : S11;
+            state = S11 : S0;
+            TRUE : state;
+        esac;
+
+    next(P2Srv) := state = S1;
+    next(RtP2) := state = S2;
+    next(SAkP2) := state = S3;
+    next(crash) := state = S4;
+    next(P2P1) := state = S5;
+    next(P1AkP2) := state = S6;
+    next(P1P2) := state = S7;
+    next(P2AkP1) := state = S8;
+    next(P1Srv) := state = S9;
+    next(RtP1) := state = S10;
+    next(Drop) := state = S11;
+
+-- Propriétés de sécurité
+
+CTLSPEC AG (!P1Srv -> Drop)    -- PC1 ne peut jamais envoyer un paquet au serveur
+
+CTLSPEC AG (!crash)    -- Le routeur ne plante jamais
+
+CTLSPEC AG (P2Srv -> AX RtP2)   -- Si PC2 envoie un paquet, le routeur reçoit le paquet
+

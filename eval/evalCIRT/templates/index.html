@@ -3,11 +3,12 @@
 {%  load static %}
  
     {% block content %}
-    <div class="column">
+    <div class="column" background-color="lightblue">
         <h1>Simulateur du Réseau de Petri</h1>
         <div class="controls mb-3">
-            <button class="btn btn-primary text-white btn-sm mr-2 mb-2" data-toggle="modal" data-target="#modalDepense" onclick="addPlace()"><i class="fas fa-plus fa-sm text-white-50"></i> Place</button>
+            <button class="btn btn-primary" onclick="addPlace()" data-toggle="modal" data-target="#modalDepense"><i class="fas fa-plus fa-sm text-white-50"></i> Place</button>
             <button class="btn btn-primary" onclick="addTransition()"><i class="fas fa-plus fa-sm text-white-50"></i>Transition</button>
+            <button class="btn btn-primary" onclick="runNet()"><i class="fas fa-play"></i>Run</button>
             <button class="btn btn-danger" onclick="removeElement()">Remove</button>
             <button class="btn btn-secondary" onclick="clearNet()">Clear</button>
             <button class="btn btn-info" id="drawLineButton">Link</button>
@@ -17,6 +18,7 @@
             <svg id="svg-canvas"></svg>
         </div>
     </div>
+    <BR> </BR>
     <div class="column">
       <h1>Interface NuSMV</h1>
       <form method="post">
@@ -29,6 +31,8 @@
       <pre>{{ result }}</pre>
       {% endif %}
       <div class="bottom-section">
+        <BR> </BR>
+        <h1>Interface GPT</h1>
           <textarea id="userInput" rows="10" cols="20" class="form-control mb-3"></textarea>
           <button onclick="fetchGPTResponse()" class="btn btn-secondary">Get Response</button>
       </div>
@@ -48,7 +52,7 @@ let drawingArc = false;
 function addPlace() {
     const place = document.createElement('div');
     place.className = 'place';
-    place.id = `P${placeCounter++}`;
+    place.id = `PC${placeCounter++}`;
     place.style.left = `${Math.random() * 80}%`;
     place.style.top = `${Math.random() * 80}%`;
     place.innerHTML = `<div class="tokens"></div>${place.id}`;
@@ -361,22 +365,21 @@ function clearNuSMVCode() {
                       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                       <div class="modal-content">
                           <div class="modal-header justify-content-center">
-                          <h5 class="modal-title modal-title-custom">
-                            Ajout d'un actif
-                          </h5> 
+                            <h5 class="modal-title modal-title-custom">
+                                Ajout d'un actif
+                            </h5> 
                           </div>
                           <div class="modal-body"> 
                                 {% csrf_token %}
-                                {{ form.as_p }}
-                                <div class="modal-body"> 
-                            </div>
-                                <div class="modal-footer">
+                                {{ form.as_p }} 
+                           </div>
+                            <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
                                 <button type="submit" class="btn btn-success">Valider</button> 
-                                </div>
+                            </div>
                             </div>
                       </div>
-                  </form>
+                </form>
 
                 <table class="table table-sm table-striped dataTable_actif" width="100%">
                     <thead>
@@ -394,11 +397,23 @@ function clearNuSMVCode() {
                         {% for actif in actifs %}
                             <tr>
                                 <td>{{ actif.id }}</td>
-                                <td>{{ actif.Catégorie }}</td>
+                                <td>{{ actif.nom.type_actif }}</td>
                                 <td>{{ actif.description }}</td>
-                                <td>{{ actif.CPE_id }}</td>
-                                <td>{{ actif.Interface_physique }}</td>
-                                <td>{{ Interfaces_logique }}</td>
+                                <td>{{ actif.cpe_id }}</td>
+                                <td> 
+                                    {% for interface in actif.interface_physique.all %}
+                                        {{ interface.name }},   <!-- Assuming 'name' is a field of PhysicalInterface -->
+                                    {% empty %}
+                                        No physical interfaces available.
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for interface in actif.interface_logique.all %}
+                                        {{ interface.name }},  <!-- Assuming 'name' is a field of PhysicalInterface -->
+                                    {% empty %}
+                                        No logical interfaces available.
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     <div class="d-flex justify-content-center">
                                         <a href=" " class="btn btn-info btn-sm mr-2">
@@ -523,9 +538,42 @@ function clearNuSMVCode() {
                             </tr>
                         {% endfor %}
                     </tbody>
-                </table>
-                <br><br>
-                
+                </table> 
+                <br><br> 
+                <!-- Modal Form for Adding a New Actif -->
+ <!-- <div id="addActifModal" style="display:none;">
+    <h2>Ajout d'un actif</h2>
+    <form method="post" action="{% url 'add_actif' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Valider</button>
+        <button type="button" id="closeModalBtn">Fermer</button>
+    </form>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Catégorie</th>
+            <th>Description</th>
+            <th>CPE_ID</th>
+            <th>Interfaces physiques</th>
+            <th>Interfaces logiques</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for actif in actifs %}
+        <tr>
+            <td>{{ actif.id }}</td>
+            <td>{{ actif.categorie }}</td>
+            <td>{{ actif.description }}</td>
+            <td>{{ actif.cpe_id }}</td>
+            <td>{{ actif.interface_physique }}</td>
+            <td>{{ actif.interface_logique }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>-->
               </div> 
         </div>
         </div>  

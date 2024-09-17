@@ -2,17 +2,10 @@ from django.forms import ModelForm
 from django import forms
 from .models import *
 
-CRITICITE_CHOICES = [
-    ('5', "5"),
-    ('4', "4"),
-    ('3', "3"),
-    ('2', "2"),
-    ('1', "1")
-]
+ 
 
 #formulaire pour l'ajout des actifs
-class AssetForm(ModelForm):
-    criticité = forms.ChoiceField(choices=CRITICITE_CHOICES, label="Criticité")
+class AssetForm(ModelForm): 
     class Meta:
         model = Asset
         fields = '__all__'
@@ -28,6 +21,7 @@ class AssetForm(ModelForm):
             'valeur_indisponibilite' : forms.NumberInput(attrs={'class':'form-control'}),
             'criticité': forms.Select(attrs={'class': 'form-control'}),
         }
+
 
 class AnalyseForm(ModelForm):
     class Meta:

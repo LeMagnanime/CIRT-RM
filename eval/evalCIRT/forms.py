@@ -23,4 +23,12 @@ class DonneeForm(forms.ModelForm):
 class ActifForm(forms.ModelForm):
     class Meta:
         model = Actifs
-        fields = ['Id','Catégorie', 'Description', 'Interface_physique', 'Interface_logique']
+        fields = '__all__'
+        widgets = { 
+            'nom' : forms.Select(attrs={'class':'form-control'}),
+            #'categorie' : forms.Select(attrs={'class':'form-control'}),
+            'description': forms.TextInput(attrs={'class':'form-control'}),
+            'cpe_id' : forms.NumberInput(attrs={'class':'form-control'}),
+            'interface_physique' : forms.CheckboxSelectMultiple(),
+            'interface_logique' : forms.CheckboxSelectMultiple(),
+        }

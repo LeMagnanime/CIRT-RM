@@ -21,6 +21,7 @@
             {% csrf_token %}
 
             {{ form.as_p }}
+            
             <button type="submit">OK</button>
             <a href="{% url 'nouveau_projet' %}">Retour</a>
     </div>

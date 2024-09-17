@@ -7,140 +7,494 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 20px;
         }
-        h1, h2, h3, h4, h5, h6 {
-            color: #2c3e50;
-        }
-        header, section, footer {
+        .header-buttons {
+            text-align: right;
             margin-bottom: 20px;
         }
-        .summary, .methods, .results, .recommendations {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
         }
-        .results table {
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .report-header p {
+            margin: 0;
+        }
+        .report-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-        }
-        .results table, .results th, .results td {
-            border: 1px solid #ccc;
-        }
-        .results th, .results td {
-            padding: 10px;
-            text-align: left;
-        }
-        .print-button, .save-button {
-            display: flex;
-            justify-content: flex-end;
             margin-bottom: 20px;
         }
-        .print-button button, .save-button button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        .print-button button:hover, .save-button button:hover {
-            background-color: #2980b9;
+        th {
+            background-color: #f2f2f2;
         }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
         }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+
+        }
+        
     </style>
     <script>
-        function printPage() {
+        function printReport() {
             window.print();
         }
-        function saveReport() {
-            // Fonction pour sauvegarder le rapport (peut être implémentée pour enregistrer les données modifiées)
-            alert('Rapport sauvegardé (fonctionnalité à implémenter)');
+
+        function exportToWord() {
+            const content = document.getElementById("reportContent").innerHTML;
+            const blob = new Blob(['\ufeff', content], {
+                type: 'application/msword'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Rapport_Analyse_Risques.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function displayDate() {
+            const today = new Date();
+            const dateString = today.toLocaleDateString('fr-FR', {
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric'
+            });
+            document.getElementById('reportDate').innerText = dateString;
         }
     </script>
 </head>
-<body>
+<body onload="displayDate()">
+    <div class="header-buttons">
+        <button onclick="exportToWord()">Exporter en Word</button>
+        <button onclick="printReport()">Imprimer</button>
+    </div>
 
-<header>
-    <h1>Rapport d'Analyse des Risques</h1>
-    <p>Date : <strong><input type="text" value="11 Juillet 2024" /></strong></p>
-    <p>Auteur : <strong><input type="text" value="Nom de l'Auteur" /></strong></p>
-</header>
+    <div id="reportContent">
+        <div class="report-header">
+            <div class="report-title">Rapport d'Analyse des Risques</div>
+        </div>
 
-<div class="print-button">
-    <button onclick="printPage()">Imprimer</button>
-</div>
+        <p>Date : <span id="reportDate"></span></p>
+        <p>Entreprise : </p>
+        <p>Auteur : </p>
 
-<div class="save-button">
-    <button onclick="saveReport()">Sauvegarder</button>
-</div>
+        <div class="section-title">1. Introduction</div>
+        I.	CONTEXTE<p>
+    Le présent rapport circonscrit, dans un premier temps, l’environnement logique et physique dans lequel se trouve le système d’Information, décrit le système 
+d’information existant, met en exergue les résultats de l'analyse des risques réalisée pour identifier, d'évaluer et de hiérarchiser les risques potentiels afin
+ de recommander des stratégies d'atténuation adaptées.</p>
 
-<section class="summary">
-    <h2>Résumé</h2>
-    <textarea rows="4">Ceci est un résumé de l'analyse des risques menée pour [Nom de l'Organisation]. L'objectif principal de cette analyse est d'identifier, quantifier et évaluer les risques liés à la sécurité des informations afin de proposer des solutions de mitigation appropriées.</textarea>
-</section>
+ CRITERES D'EVALUATION DES RISQUES:<p>
 
-<section class="methods">
-    <h2>Méthodologie</h2>
-    <textarea rows="6">Nous avons utilisé la méthode FAIR (Factor Analysis of Information Risk) pour cette analyse. Les métriques suivantes ont été calculées :
-- SLE (Single Loss Expectancy) : Estimation de la perte financière résultant d'un seul incident de sécurité.
-- ARO (Annualized Rate of Occurrence) : Estimation du nombre de fois qu'un incident particulier est susceptible de se produire en une année.
-- ALE (Annual Loss Expectancy) : Estimation de la perte annuelle attendue, calculée comme le produit de la SLE et de l'ARO.
-    </textarea>
-</section>
+A.	INTERVALLES DE GRAVITE<p>
 
-<section class="results">
-    <h2>Résultats</h2>
-    <p>Les résultats de l'analyse montrent une distribution des pertes potentielles, aidant à comprendre les risques auxquels l'organisation est exposée.</p>
+Sur la base du tableau de croissement ci-dessus, une gravité résultante d’un scénario de risque est évaluée sur 3 niveaux :
+
+<h2 style="text-align: center;">Tableau 1:  Intervalle de gravité des risques</h2>
+
+<table>
+<thead>
+    <tr>
+        <th>Intervalle de gravité</th>
+        <th>Gravité du risque</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>[1, 2[</td>
+        <td>Risque toléré</td>
+    </tr>
+    <tr>
+        <td>[2, 3[</td>
+        <td>Risque inadmissible</td>
+    </tr>
+    <tr>
+        <td>[3, 4]</td>
+        <td>Risque inacceptable</td>
+    </tr>
+</tbody>
+</table>
+
+B.	NIVEAUX D’IMPACT<p>
+
+Les impacts défavorables dus au manque de sécurité du Système d’information peuvent être décrits en termes de perte ou de dégradation de l’intégrité, de la disponibilité, de la confidentialité et du non-respect des exigences réglementaires.
+	Il y a deux types d’impact :<p>
+-	les impacts tangibles peuvent être mesurés quantitativement par la perte des revenus, le coût de réparation ou le degré d’effort requis pour résoudre un problème causé par une action de menace.<p>
+-	les impacts intangibles tels que la perte de confiance du public ou la perte de crédibilité ne peuvent pas être mesurés quantitativement, mais peuvent être qualifiés ou décrites par des impacts catastrophiques, majeurs, modérés ou mineurs
+Ainsi, le niveau d’impact est défini selon les exigences normatives, internes, externes, réglementaires et légales du cadre dans lequel évolue l’organisation.
+
+<h2 style="text-align: center;">Tableau 2: Description des Niveaux d'Impact</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>DESCRIPTION</th>
+            <th>DESCRIPTION DETAILLEE DE L’IMPACT</th>
+            <th>NIVEAU D’IMPACT</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Mineur</td>
+            <td>Traitement possible de suite sur site, réparation immédiate, perte financière faible</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>Modéré</td>
+            <td>Traitement exigé, perte financière modérée</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>Majeur</td>
+            <td>Perte importante, assistance externe exigée</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>Catastrophique</td>
+            <td>Perte insupportable</td>
+            <td>4</td>
+        </tr>
+    </tbody>
+</table>
+
+C.	POTENTIALITE D’OCCURRENCE<p>
+	L’importance du risque ne dépend pas seulement du niveau de confidentialité, d’intégrité et de disponibilité, mais aussi de la fréquence d’occurrence qui représente la probabilité que la cause d’un impact se produise.
+
+<h2 style="text-align: center;">Tableau 3: Description des Échelles de Potentialité</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>DESCRIPTION</th>
+            <th>DUREE</th>
+            <th>VALEUR</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Très peu probable</td>
+            <td>1 fois tous les 10 ans et plus</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>Peu probable</td>
+            <td>1 à 2 fois tous les 10 ans</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>Probable</td>
+            <td>&gt; 2 fois par an</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>Très probable</td>
+            <td>&gt; 1 fois tous les trois mois</td>
+            <td>4</td>
+        </tr>
+    </tbody>
+</table>
+
+D.	EVALUATION DE LA GRAVITE DES RISQUES<p>
+
+	La gravité d'un risque est fonction de la probabilité d'occurrence et de l'impact qu'aurait ce dernier s'il se concrétise ; Ainsi elle sera évaluée à l 'aide de la formule suivante:<p>
+    R= P*I            où p est la fréquence d'occurrence et I l'impact<p>
+	L'application de cette formule  est ainsi effectuée par lecture de la matrice suivante donnant la gravité du risque en fonction de la potentialité et de l’impact:
+
+    <h2 style="text-align: center;">Matrice de Risque</h2>
+
     <table>
-        <thead>
+        <tr>
+            <th rowspan="5">Impact</th>
+            <th></th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td class="yellow">2</td>
+            <td class="orange">3</td>
+            <td class="red">4</td>
+            <td class="red">4</td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td class="green-light">2</td>
+            <td class="yellow">2</td>
+            <td class="orange">3</td>
+            <td class="red">4</td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td class="green-light">1</td>
+            <td class="green-light">2</td>
+            <td class="yellow">2</td>
+            <td class="orange">3</td>
+        </tr>
+        <tr>
+            <th>1</th>
+            <td class="green-light">1</td>
+            <td class="green-light">1</td>
+            <td class="green-light">2</td>
+            <td class="yellow">2</td>
+        </tr>
+        <tr>
+            <th colspan="2">Potentialité</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+        </tr>
+    </table>
+
+                Tableau 4 : Matrice d'évaluation des risques
+ 
+On définit ainsi une gravité résultante d’un scénario de risque sur 3 niveaux :
+Une gravité de risque appartenant à [3, 4] correspond à un risque inacceptable : des mesures urgentes doivent être prises ;
+
+Une gravité de risque appartenant à [2, 3[correspond à un risque inadmissible qui devrait être réduit à échéance déterminée ;
+
+Une gravité de risque appartenant à [1, 2[correspond à un risque toléré
+
+
+        <div class="section-title">2. Méthodologie d'Analyse des Risques</div>
+        <p>L'analyse des risques a été réalisée en utilisant la méthodologie ISO 27005. Les étapes suivantes ont été suivies :</p>
+        <ul>
+            <li>Identification des actifs</li>
+            <li>Identification des menaces</li>
+            <li>Identification des vulnérabilités</li>
+            <li>Évaluation des risques</li>
+            <li>Élaboration de mesures de contrôle</li>
+        </ul>
+
+        <div class="section-title">3. Contexte de l'Analyse</div>
+        <p>Portée : Le périmètre de cette analyse des risques inclut [décrire la portée].</p>
+        <p>Objectifs de sécurité : Confidentialité, intégrité, disponibilité.</p>
+
+        <div class="section-title">4. Identification des Actifs</div>
+        <table class="table table-sm table-striped dataTable_actif" width="100%">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Valeur unitaire</th> 
+                    <th>Coût de l'installation</th>
+                    <th>Coût d'entretien</th>
+                    <th>VA</th> 
+                    <th>Valeur d'indisponibilité(/J)</th>
+                    <th>Criticité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead> 
+            <tbody>
+                {% for actif in actifs %}
+                    <tr>
+                        <td>{{ actif.nom_actif }}</td>
+                        <td>{{ actif.type_actif }}</td>
+                        <td>{{ actif.description }}</td>
+                        <td>{{ actif.valeur_unitaire_actif }} FCFA</td>
+                        <td>{{ actif.cout_installation }} FCFA</td>
+                        <td>{{ actif.cout_entretien }} FCFA</td>
+                        <td>{{ actif.va }} FCFA</td>
+                        <td>{{ actif.valeur_indisponibilite }} FCFA</td>
+                        <td>{{ actif.criticite }}</td> <!-- Affichage de la criticité -->
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <a href=" " class="btn btn-info btn-sm mr-2">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+
+                                <a type="button" href="" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#exampleModal-{{ item.structure.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <div class="modal fade" id="exampleModal-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <form method="post" class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header justify-content-center">
+                                        <h5 class="modal-title modal-title-custom" id="exampleModalLabel">Modification de l'actif : <small>{{ item.structure.nom }}</small></h5> 
+                                        </div> 
+                                        <div class="modal-body"> 
+                                            {% csrf_token %}
+                                            <div class="form-row">
+                                                <div class="form-group col-md-8">
+                                                    {{ item.edit_form.nom.label_tag }} 
+                                                    {{ item.edit_form.nom }}
+                                                    {% if item.edit_form.errors %}
+                                                        <div class="dange">
+                                                            {{ item.edit_form.errors.nom }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    {{ item.edit_form.sigle.label_tag }}
+                                                    {{ item.edit_form.sigle }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                {{ item.edit_form.categorie.label_tag }}
+                                                {{ item.edit_form.categorie }}
+                                                {% if item.edit_form.errors.categorie %}
+                                                    <div class="text-danger">
+                                                        {{ item.edit_form.errors.categorie }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="form-group"> 
+                                                {{ item.edit_form.description.label_tag }}
+                                                {{ item.edit_form.description }}
+                                            </div>
+                                            <div class="form-group"> 
+                                                {{ item.edit_form.adresse.label_tag }}
+                                                {{ item.edit_form.adresse }}
+                                                {% if item.edit_form.errors.adresse %}
+                                                    <div class="text-danger">
+                                                        {{ item.edit_form.errors.adresse }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4"> 
+                                                    {{ item.edit_form.email.label_tag }}
+                                                    {{ item.edit_form.email }}
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    {{ item.edit_form.telephone.label_tag }}
+                                                    {{ item.edit_form.telephone }}
+                                                    {% if item.edit_form.errors.telephone %}
+                                                        <div class="text-danger">
+                                                            {{ item.edit_form.errors.telephone }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div> 
+                                                <div class="form-group col-md-4">
+                                                    {{ item.edit_form.photo.label_tag }}
+                                                    {{ item.edit_form.photo }}
+                                                    {% if item.edit_form.errors.photo %}
+                                                        <div class="text-danger">
+                                                            {{ item.edit_form.errors.photo }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                                <input type="hidden" name="edit_structure" value="1">
+                                            </div> 
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+
+
+                                <a type="button" href="" class="btn btn-danger btn-sm mr-2" data-toggle="modal" data-target="#modaldelete-{{ item.structure.id }}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+
+
+                                <form method="post" class="modal fade" id="modaldelete-{{ item.structure.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header justify-content-center">
+                                          <h5 class="modal-title modal-title-custom">
+                                             Suppréssion de l'actif : <small style="font-style: italic;">{{ item.structure.nom }}</small>
+                                          </h5> 
+                                        </div>
+                                        <div class="modal-body"> 
+                                            {% csrf_token %}
+                                            <p>Voulez-vous vraiment supprimer la structure <span style="color:rgb(61, 61, 255)">«{{ item.structure.nom }}»</span> ?</p>
+                                            {{ item.delete_form }}
+                                            <input type="hidden" name="structure_{{ item.structure.pk }}" value="1">
+                                            <input type="hidden" name="delete_structure" value="1">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">valider</button> 
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button> 
+                                        </div>
+                                      </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="section-title">5. Identification des Menaces et Vulnérabilités</div>
+    ici il faut imprimer la page des vulnérabilités et la joindre en annexe à ce rapport car elle est très bien détaillé.
+
+        <div class="section-title">6. Évaluation des Risques</div>
+        <table>
             <tr>
                 <th>Risque</th>
-                <th>SLE (EUR)</th>
-                <th>ARO</th>
-                <th>ALE (EUR)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" value="Risque 1" /></td>
-                <td><input type="text" value="10000" /></td>
-                <td><input type="text" value="0.5" /></td>
-                <td><input type="text" value="5000" /></td>
+                <th>Probabilité</th>
+                <th>Impact</th>
+                <th>Niveau de Risque</th>
+                <th>Priorité d'atténuation</th>
             </tr>
             <tr>
-                <td><input type="text" value="Risque 2" /></td>
-                <td><input type="text" value="20000" /></td>
-                <td><input type="text" value="0.1" /></td>
-                <td><input type="text" value="2000" /></td>
+                <td>Cyberattaque par phishing</td>
+                <td>Élevée</td>
+                <td>Élevé</td>
+                <td>Critique</td>
+                <td>Priorité haute</td>
             </tr>
-            <!-- Ajoutez d'autres lignes de risques si nécessaire -->
-        </tbody>
-    </table>
-</section>
+        </table>
 
-<section class="recommendations">
-    <h2>Recommandations</h2>
-    <textarea rows="6">Sur la base des résultats de l'analyse, nous recommandons les actions suivantes pour atténuer les risques identifiés :
-- Mettre en place des mesures de sécurité supplémentaires pour réduire la probabilité d'occurrence des incidents les plus critiques.
-- Former le personnel aux meilleures pratiques en matière de sécurité de l'information.
-- Effectuer des audits réguliers pour identifier et corriger les vulnérabilités potentielles.
-    </textarea>
-</section>
+        <div class="section-title">7. Mesures de Contrôle Recommandées</div>
+        <ul>
+            <li><b>Cyberattaque par phishing :</b> Formation de sensibilisation à la sécurité, solution anti-phishing.</li>
+            <li><b>Dommages matériels par inondation :</b> Installation de barrières anti-inondation, stockage de copies de sauvegarde hors site.</li>
+        </ul>
 
-<footer>
-    <p>&copy; 2024 Nom de l'Organisation. Tous droits réservés.</p>
-</footer>
+        <div class="section-title">8. Plan de Suivi et de Mise à Jour</div>
+        <p>Suivi mensuel pour évaluer l'efficacité des mesures de contrôle et mise à jour régulière du rapport.</p>
+
+        <div class="section-title">9. Conclusion</div>
+        <p>Cette analyse des risques met en lumière les risques critiques pour [nom de l'organisation/projet] et recommande des mesures correctives spécifiques pour atténuer ces risques.</p>
 
 </body>
 </html>
