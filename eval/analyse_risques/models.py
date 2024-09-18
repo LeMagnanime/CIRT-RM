@@ -108,18 +108,21 @@ class EvaluationRisque(models.Model):
         # Définir la valeur de risque
         self.risque = f"{self.actif.nom_actif}-R{formatted_id}"
         # Effectuer les calculs avant l'enregistrement
-        self.sle = float(self.facteur_exposition) * self.actif.va # Assurez-vous que "valeur" est le champ approprié pour la valeur de l'actif
+        if self.facteur_exposition == 1:
+            self.sle = float(self.facteur_exposition * self.actif.va + self.actif.valeur_indisponibilite)
+        else:
+            self.sle = float(self.facteur_exposition) * self.actif.va # Assurez-vous que "valeur" est le champ approprié pour la valeur de l'actif
         self.impact_financier = int(self.sle * self.probabilite_occurrence)
         if self.impact_financier <= 10000:
-            self.valeur_risque = 1
+            self.valeur_risque = int(1 * self.probabilite_occurrence)
         elif 10000 < self.impact_financier <= 50000:
-            self.valeur_risque = 2
+            self.valeur_risque = int(2 * self.probabilite_occurrence)
         elif 50000 < self.impact_financier <= 200000:
-            self.valeur_risque = 3
+            self.valeur_risque = int(3 * self.probabilite_occurrence)
         elif 200000 < self.impact_financier <= 1000000:
-            self.valeur_risque = 4
+            self.valeur_risque = int(4 * self.probabilite_occurrence)
         else:  # impact_financier > 1000000
-            self.valeur_risque = 5
+            self.valeur_risque = int(5 * self.probabilite_occurrence)
         print(self.valeur_risque)
 
         # Appeler la méthode save() originale pour enregistrer l'objet
